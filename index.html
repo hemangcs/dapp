@@ -6,49 +6,35 @@
  <meta http-equiv="X-UA-Compatible" content="ie=edge">
  <title>Document</title>
 <link rel="stylesheet" type="text/css" href="index.css">
-<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@0.18.2/dist/web3.min.js"></script>
+<script src = "https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
 </head>
 <body>
- <div class="container">
-<h1>Digital Pathology Enabler</h1>
-<h2 id="MedRecord"></h2>
+<div class="container">
+<h1>First Smart Contract</h1>
+<h2 id="instructor"></h2>
 <img id="loader" src="Spinner.gif">
-<label for="id" class="col-lg-2 control-label">Id </label>
- <input id="id" type="text">
-<label for="fname" class="col-lg-2 control-label">URL </label>
- <input id="fname" type="text" value = "Context ID">
- <button id="button">Update Medical Record</button>
-
- <button id="transfer"> Transfer NFT</button>
+<h2 id="MedRecord"></h2>
+<h3 id="NFTRecord"> </h3>
+<label for="name" class="col-lg-2 control-label">Image ADDRESS</label>
+ <input id="name" type="text" value = "address">
+<label for="name" class="col-lg-2 control-label">Image PATH</label>
+ <input id="age" type="text">
+<button id="button">Update NFT here</button>
+<button id="transferbutton">Transfer the NFT Over</button>
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script>
-   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-   web3.eth.defaultAccount = web3.eth.accounts[0];
-  // console.log(web3.eth.defaultAccount);
-  // console.log(web3.eth.getBlock("latest").gasLimit);
-//   console.log(web3.eth.getBalance("0xaf6dace9cfef128737b907e1de08567256860aa8"));
 
-var MedContract = web3.eth.contract
-([
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_uri",
-				"type": "string"
-			}
-		],
-		"name": "mint",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
+console.log("here 1");
+ // set the provider you want from Web3.providers
+web3 = new Web3(new Web3.providers.WebsocketProvider("ws://localhost:8545"));
+console.log("here 4");
+web3.eth.defaultAccount = '0x138a932E779D5575355261F64D8544d8003bC4A8';
+console.log(web3.eth.defaultAccount);
+
+
+var MedContract = new web3.eth.Contract (
+	[
 	{
 		"anonymous": false,
 		"inputs": [
@@ -75,6 +61,99 @@ var MedContract = web3.eth.contract
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "uri",
+				"type": "string"
+			}
+		],
+		"name": "MintUri",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "SAFETransferFrom",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "uri",
+				"type": "string"
+			}
+		],
+		"name": "mint",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -91,31 +170,6 @@ var MedContract = web3.eth.contract
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "string",
-				"name": "uri",
-				"type": "string"
-			}
-		],
-		"name": "MintUri",
-		"type": "event"
 	},
 	{
 		"inputs": [
@@ -152,31 +206,6 @@ var MedContract = web3.eth.contract
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "_from",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "SAFETransferFrom",
-		"type": "event"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -193,56 +222,79 @@ var MedContract = web3.eth.contract
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "_from",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "Transfer",
-		"type": "event"
 	}
-],
-{from:'0x166FbfBf49e0495aeF3F84812E8c56a5a186b3F3', gasPrice:'20000000000',gasLimit:'90000000'}
-);
+]
+ , '0xD149CeBD3b7B29e961D3b8963d791894D7984719');
 
-var MediCo = MedContract.at('0x166FbfBf49e0495aeF3F84812E8c56a5a186b3F3');
-//    MediCo.mint(web3.eth.defaultAccount,"hi there");
-    var MedicoEvent = MediCo.MintUri();
-    MedicoEvent.watch(function(error, result){
-        console.log("in here");
+
+
+/*Courses.getInstructor(function(error, result){
+  if(!error){
+	$("#instructor").html(result[0]+ '('+result[1]+' years old)');
+    console.log(result);
+    }
+ else
+   console.error(error);
+ });
+*/
+
+$("#button").click(function() {
+	$("loader").show();
+    console.log($("#age").val());
+    MedContract.methods.mint('0x138a932E779D5575355261F64D8544d8003bC4A8',$("#age").val()).
+	send({from:web3.eth.defaultAccount},function(error,transactionHash){
+		if(!error){
+			console.log(transactionHash);
+		} else {
+		console.log(error);
+		}
+	});
+});
+
+MedContract.events.MintUri({
+	fromBlock:"latest"
+}, function(error, event){
+	console.log("Comes to event here");
             if (!error)
                 {
                     $("#loader").hide();
-                    $("#MedRecord").html('here' + result.args._to+ '(' + result.args._tokenId + 'tokenID)');
-                    console.log(result);
+                    $("#instructor").html("address" + event.returnValues['0']);
+                    $("#MedRecord").html("token ID" + event.returnValues['1']);
+                    console.log("tries it here 1" + event.returnValues);
                 } else {
                     $("#loader").hide();
-                    console.log(error);
+                    console.log("tries it here 2" + event);
                 }
         });
-$("#button").click(function() {
+
+
+$("#transferbutton").click(function() {
 	$("loader").show();
-    MediCo.mint(web3.eth.defaultAccount,$("#id").val());
-    console.log("out here");
+    MedContract.methods.safeTransferFrom('0x138a932E779D5575355261F64D8544d8003bC4A8','0xb43CE2E96E0F398956DD57ceD0033bf2eB9BC170',29,'0x000000456789').
+	send({from:web3.eth.defaultAccount},function(error,transactionHash){
+		if(!error){
+			console.log(transactionHash);
+		} else {
+		console.log(error);
+		}
+	});
 });
- </script>
+
+MedContract.events.SAFETransferFrom({
+	fromBlock:"latest"
+}, function(error, event){
+	console.log("Comes to event here");
+            if (!error)
+                {
+                    $("#loader").hide();
+                    $("#instructor").html("address" + event.returnValues['0']);
+                    $("#MedRecord").html("token ID" + event.returnValues['1']);
+                    console.log("tries it here 1" + event.returnValues);
+                } else {
+                    $("#loader").hide();
+                    console.log("tries it here 2" + event);
+                }
+        });
+</script>
 </body>
 </html>
